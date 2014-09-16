@@ -1,4 +1,4 @@
 ppclc-graphics
 ==============
 
-ppclc graphics
+ppclc graphics for media projects
