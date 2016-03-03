@@ -1,0 +1,99 @@
+select count(*) from phpbb_posts 
+where FROM_UNIXTIME(post_time) > '2014-12-31';
+
+SELECT DAYOFMONTH(date), count(*) FROM Post
+WHERE MONTH(date) = '2'
+GROUP BY DAYOFMONTH(date)
+ORDER BY DAYOFMONTH(date) ASC;
+
+SELECT MONTHNAME(FROM_UNIXTIME(post_time)) as Month, count(*) as 'Posts' FROM phpbb_posts
+WHERE YEAR(FROM_UNIXTIME(post_time)) = '2010'
+GROUP BY MONTHNAME(FROM_UNIXTIME(post_time))
+ORDER BY MONTH(FROM_UNIXTIME(post_time)) ASC;
+
+
++-----------+------------+
+| Month     | 2015 Posts |
++-----------+------------+
+| January   |        645 |
+| February  |        819 |
+| March     |        872 |
+| April     |        907 |
+| May       |        669 |
+| June      |        590 |
+| July      |        764 |
+| August    |        819 |
+| September |        993 |
+| October   |        956 |
+| November  |       1074 |
+| December  |        207 |
++-----------+------------+
++------------+
+| 2014 Posts |
++------------+
+|       1249 |
+|        895 |
+|       1076 |
+|       1043 |
+|        996 |
+|        875 |
+|        848 |
+|        840 |
+|        775 |
+|        741 |
+|        407 |
+|        647 |
++------------+
+
++------------+
+| 2013 Posts |
++------------+
+|       1122 |
+|        923 |
+|       1219 |
+|       1208 |
+|        749 |
+|        661 |
+|        901 |
+|        814 |
+|        950 |
+|        976 |
+|        873 |
+|        860 |
++------------+
+
+
+
+
+
+SELECT MONTHNAME(FROM_UNIXTIME(post_time)) as Month, count(*) as Posts FROM phpbb_posts
+WHERE YEAR(FROM_UNIXTIME(post_time)) = '2015'
+GROUP BY MONTHNAME(FROM_UNIXTIME(post_time))
+ORDER BY MONTH(FROM_UNIXTIME(post_time)) ASC;
+
+
+SELECT MONTHNAME(FROM_UNIXTIME(user_regdate)) as Month, count(*) as 'Users' FROM phpbb_users
+WHERE YEAR(FROM_UNIXTIME(user_regdate)) = '2008'
+GROUP BY MONTHNAME(FROM_UNIXTIME(user_regdate))
+ORDER BY MONTH(FROM_UNIXTIME(user_regdate)) ASC;
+
+
+SELECT MONTHNAME(FROM_UNIXTIME(post_time)) as Month, 
+YEAR(FROM_UNIXTIME(post_time)) as Year, username, count(*) as 'posts' 
+FROM phpbb_posts
+Join phpbb_users ON (poster_id = user_id)
+WHERE YEAR(FROM_UNIXTIME(post_time)) = '2015'
+AND MONTHNAME(FROM_UNIXTIME(post_time)) = 'November'
+GROUP BY username 
+ORDER BY count(*) DESC limit 5;
+
+SELECT Month, Year, Username, Posts FROM (
+SELECT MONTHNAME(FROM_UNIXTIME(post_time)) as Month, 
+YEAR(FROM_UNIXTIME(post_time)) as Year, 
+username, count(*) as 'posts' , MONTH(FROM_UNIXTIME(post_time)) as Monum
+FROM phpbb_posts
+Join phpbb_users ON (poster_id = user_id)
+WHERE YEAR(FROM_UNIXTIME(post_time)) = '2010'
+GROUP BY MONTHNAME(FROM_UNIXTIME(post_time)), username 
+ORDER BY MONTH(FROM_UNIXTIME(post_time)), count(*) DESC) as data
+group by Month, Year order by Monum;
